@@ -53,3 +53,9 @@
   <script src="https://cdn.jsdelivr.net/gh/daniel2gg/pro-block@main/pro.js"></script>
 </body>
 </html>
+## 📦 Installation  
+
+Add the following script tag to your HTML file:  
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/daniel2gg/Properties-html@main/Properties-html.js"></script>
