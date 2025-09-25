@@ -22,15 +22,8 @@
  *
  * Repository: https://github.com/daniel2gg/properties-html
  */
-//so that <pro> does not appear as a custom paragraph
- document.querySelectorAll("pro").forEach(el => {
-  el.style.display = "block";
-});
-// So that <pro> is considered a block element (not a paragraph)
-customElements.define("pro", class extends HTMLElement {});
-// Parser <pro>
 document.querySelectorAll("pro").forEach(block => {
-  let content = block.innerText.trim();
+  let content = block.textContent.trim(); // ganti innerText → textContent
   let rules = content.split("}");
 
   rules.forEach(rule => {
@@ -42,14 +35,12 @@ document.querySelectorAll("pro").forEach(block => {
     selector = selector.trim();
     body = body.trim();
 
-    // Bisa banyak elemen sesuai selector
     document.querySelectorAll(selector).forEach(target => {
       body.split("\n").forEach(line => {
         line = line.trim();
         if (!line) return;
 
         try {
-          // langsung eksekusi sebagai properti element
           eval("target." + line);
         } catch (e) {
           console.error("Error di:", line, e);
