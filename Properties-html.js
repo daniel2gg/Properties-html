@@ -20,7 +20,7 @@
  * }
  * </pro>
  *
- * Repository: https://github.com/your-username/pro-block
+ * Repository: https://github.com/daniel2gg/properties-html
  */
  
 // Parser <pro>
@@ -44,10 +44,10 @@ document.querySelectorAll("pro").forEach(block => {
         if (!line) return;
 
         try {
-          // langsung eksekusi sebagai properti element
+          
           eval("target." + line);
         } catch (e) {
-          console.error("Error di:", line, e);
+          console.error("Error in:", line, e);
         }
       });
     });
