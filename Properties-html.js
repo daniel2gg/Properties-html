@@ -1,40 +1,58 @@
 /**
- * Project: Properties-html - Custom <pro> / <pro-block> parser
+ * Project: Pro.js - Custom <pro> Property Block Parser
  * Version: 1.0.0
  * Author: Daniel2gg
  * License: MIT
  * Copyright (c) 2025 Daniel2gg
  *
- * Note:
- * - Custom element API requires a hyphen in the name, e.g. "pro-block".
- * - This script defines <pro-block> and upgrades legacy <pro> tags automatically.
- * - WARNING: this script executes JS-like statements inside <pro> blocks.
+ * Description:
+ * This script enables the use of <pro> blocks in HTML, allowing developers
+ * to define element properties (similar to CSS) using a custom syntax.
+ * Each rule inside <pro> is parsed and applied as a JavaScript property
+ * directly to the selected DOM elements.
+ *
+ * Example Usage:
+ * <pro>
+ * #myButton {
+ *   innerText = "Click me!";
+ *   style.backgroundColor = "lightblue";
+ *   onclick = () => alert("Button clicked!");
+ * }
+ * </pro>
+ *
+ * Repository: https://github.com/your-username/pro-block
  */
+ 
+// Parser <pro>
+document.querySelectorAll("pro").forEach(block => {
+  let content = block.innerText.trim();
+  let rules = content.split("}");
 
-(function () {
-  'use strict';
+  rules.forEach(rule => {
+    if (!rule.trim()) return;
 
-  // Make unknown tags styleable in very old browsers (harmless in modern ones)
-  try { document.createElement('pro'); document.createElement('pro-block'); } catch (e) {}
+    let [selector, body] = rule.split("{");
+    if (!selector || !body) return;
 
-  // Split body into top-level statements (don't split inside braces/parentheses/strings)
-  function splitTopLevelStatements(body) {
-    const out = [];
-    let cur = '';
-    let depth = 0; // {}
-    let paren = 0; // ()
-    let inSingle = false, inDouble = false, inBack = false, esc = false;
-    for (let i = 0; i < body.length; i++) {
-      const ch = body[i];
-      cur += ch;
-      if (esc) { esc = false; continue; }
-      if (ch === '\\') { esc = true; continue; }
-      if (!inSingle && !inDouble && !inBack) {
-        if (ch === "'") { inSingle = true; continue; }
-        if (ch === '"') { inDouble = true; continue; }
-        if (ch === '`') { inBack = true; continue; }
-      } else {
-        if (inSingle && ch === "'") inSingle = false;
+    selector = selector.trim();
+    body = body.trim();
+
+    // Bisa banyak elemen sesuai selector
+    document.querySelectorAll(selector).forEach(target => {
+      body.split("\n").forEach(line => {
+        line = line.trim();
+        if (!line) return;
+
+        try {
+          // langsung eksekusi sebagai properti element
+          eval("target." + line);
+        } catch (e) {
+          console.error("Error di:", line, e);
+        }
+      });
+    });
+  });
+});        if (inSingle && ch === "'") inSingle = false;
         else if (inDouble && ch === '"') inDouble = false;
         else if (inBack && ch === '`') inBack = false;
         continue;
