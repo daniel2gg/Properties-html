@@ -26,6 +26,7 @@
 <head>
   <meta charset="utf-8">
   <title>Properties-html Demo</title>
+<script src="https://cdn.jsdelivr.net/gh/daniel2gg/Properties-html@main/Properties-html.js"></script>
 </head>
 <body>
   <button id="hi"></button>
@@ -50,7 +51,7 @@
   }
   </pro>
 
-  <script src="https://cdn.jsdelivr.net/gh/daniel2gg/Properties-html@main/Properties-html.js"></script>
+  
 </body>
 </html>
 ```
