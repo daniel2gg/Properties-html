@@ -3,31 +3,35 @@
 <head>
   <meta charset="utf-8">
   <title>Properties-html Demo</title>
-  <script src="https://cdn.jsdelivr.net/gh/daniel2gg/Properties-html@main/Properties-html.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/daniel2gg/Properties-html@main/Properties-html.js"></script>
 </head>
 <body>
   <button id="hi"></button>
   <button class="test"></button>
   <p class="hello"></p>
+  <input id="input" />
 
   <style type="prop">
   #hi(
-    innerText = "Klik saya!";
-    style.backgroundColor = "lightblue";
-    onclick = () => alert("Halo dari #hi!");
+    innerText = "Klik saya!",
+    style = "background-color:lightblue;",
+    
   ),
-
+   #input(
+   type="file"
+   ),
   .test(
-    innerText = "Tombol Class";
-    style.backgroundColor = "lightgreen";
+    innerText = "Tombol Class",
+    style.backgroundColor = "lightgreen",
+    
   ),
 
   .hello (
-    innerText = "Paragraf otomatis!";
-    style.color = "red";
+    innerText = "Paragraf otomatis!",
+    style = "color: red;"
   )
   </style>
 
 
 </body>
-  </html>
+</html>
