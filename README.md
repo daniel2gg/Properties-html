@@ -32,28 +32,33 @@
   <button id="hi"></button>
   <button class="test"></button>
   <p class="hello"></p>
+  <input id="input" />
 
   <style type="prop">
   #hi(
-    innerText = "Klik saya!";
-    style.backgroundColor = "lightblue";
-    onclick = () => alert("Halo dari #hi!");
+    innerText = "Klik saya!",
+    style = "background-color:lightblue;",
+    
   ),
-
+   #input(
+   type="file"
+   ),
   .test(
-    innerText = "Tombol Class";
-    style.backgroundColor = "lightgreen";
+    innerText = "Tombol Class",
+    style.backgroundColor = "lightgreen",
+    
   ),
 
   .hello (
-    innerText = "Paragraf otomatis!";
-    style.color = "red";
+    innerText = "Paragraf otomatis!",
+    style = "color: red;"
   )
   </style>
 
 
 </body>
   </html>
+```
 ---
 
 ## 📦 Installation  
