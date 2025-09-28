@@ -1,13 +1,13 @@
 /**
- * Project: Pro.js - Custom <pro> Property Block Parser
+ * Project: Pro.js - Custom <style type="prop"> Parser
  * Version: 1.0.1
  * Author: Daniel2gg
  * License: MIT
  *
- *!
- * prop.js — style[type="prop"] parser
- * 
- * Auto-applies on load
+ * Features:
+ * - Multiple selector assignment in one block
+ * - Index-based selector [n] (body, script, style counted)
+ * - Auto-applies on load
  */
 (function (global) {
   'use strict';
@@ -83,12 +83,52 @@
     while (tmp.firstChild) parent.appendChild(tmp.firstChild);
   }
 
+  function getElementsByIndex(index) {
+    // Hitung semua elemen dalam body (body, script, style, input, dll)
+    const all = [document.body, ...document.body.querySelectorAll('*')];
+    return all[index] ? [all[index]] : [];
+  }
+
   function applyBlock(selectorText, content) {
     const selectors = selectorText.split(',').map(s => s.trim()).filter(Boolean);
     if (!selectors.length) return;
-    const propParts = splitProps(content);
+
     selectors.forEach(sel => {
-      const elements = document.querySelectorAll(sel);
+      let elements = [];
+
+      // Index-based selector [n]
+      const indexMatch = sel.match(/^\[(\d+)\]$/);
+      if (indexMatch) {
+        const idx = parseInt(indexMatch[1], 10);
+        elements = getElementsByIndex(idx);
+      } else {
+        try {
+          elements = document.querySelectorAll(sel);
+        } catch {
+          elements = [];
+        }
+      }
+
+      if (!elements.length) return;
+
+      // Sub-selector support (backtick) sederhana
+      if (/=\s*`/.test(content)) {
+        const subs = splitProps(content);
+        subs.forEach(sub => {
+          const eqIndex = sub.indexOf('=');
+          if (eqIndex === -1) return;
+          const subSel = sub.slice(0, eqIndex).trim();
+          let subContent = sub.slice(eqIndex + 1).trim();
+          if (subContent.startsWith('`') && subContent.endsWith('`')) {
+            subContent = subContent.slice(1, -1);
+          }
+          applyBlock(subSel, subContent);
+        });
+        return;
+      }
+
+      // Normal property assignment
+      const propParts = splitProps(content);
       elements.forEach(el => {
         propParts.forEach(part => {
           if (!part) return;
@@ -102,8 +142,10 @@
           if (eqIndex === -1) return;
           const key = part.slice(0, eqIndex).trim();
           let val = part.slice(eqIndex + 1).trim();
-          if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) val = val.slice(1, -1);
-          try { el[key] = val; } catch (e) {}
+          if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+            val = val.slice(1, -1);
+          }
+          try { el[key] = val; } catch {}
         });
       });
     });
@@ -119,7 +161,7 @@
     });
   }
 
-  // Automatically run on load
+  // Auto-run on load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', applyPropStyles);
   } else {
